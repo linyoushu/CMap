@@ -6,8 +6,15 @@
 #include<vector>
 #include"Edge.h"
 #include"Node.h"
-
+#define N 20//顶点个数  
 using namespace std;
+typedef struct
+{
+	char vexs[N];//顶点数组  
+	int arcs[N][N];//邻接矩阵  
+				   /*m_pNodeArray = new Node[m_iCapacity];
+				   m_pMatrix = new int[m_iCapacity * m_iCapacity];*/
+}graph;
 
 class CMap
 {
@@ -20,6 +27,8 @@ public:
 	bool setValueToMatrixForUndirectedGraph(int row, int col, int val = 1);
 
 	void printMartix();
+	/*void assignmentMatrix(int row, int col, graph g , int matrix[][20]);*/
+	
 
 	void deathFirstTraverse(int nodeIndex);//深度遍历 
 	void breadthFirstTraverse(int nodeIndex);//广度遍历
@@ -27,12 +36,12 @@ public:
 	void primTree(int nodeIndex);
 	void kruskalTree();
 
+	int *m_pMatrix;//存邻接矩阵
 
 private:
 	int m_iCapacity;//图中最多顶点数
 	int m_iNodeCount;//用来存图中已有顶点数
 	Node *m_pNodeArray;//存顶点矩阵
-	int *m_pMatrix;//存邻接矩阵
 	Edge *m_pEdge;
 
 	bool getValueFromMatrix(int row, int col, int&val);

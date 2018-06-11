@@ -109,6 +109,10 @@ void CMap::printMartix()
 		cout << endl;
 	}
 }
+
+
+
+
 //深度优先遍历
 void CMap::deathFirstTraverse(int nodeIndex)
 {

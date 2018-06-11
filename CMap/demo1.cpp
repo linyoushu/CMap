@@ -3,6 +3,50 @@
 #include"CMap.h"
 using namespace std;
 
+void TopoSort_matrix(graph g)
+{
+	int row[N] = { 0 };//按照列来设置标志，为1表示已经输出（不再考虑），为0表示未输出。  
+	int v = 1;//标志符，1表示已经输出（不再考虑），为0表示未输出，赋给row数组  
+	int i, j, k, t, m;
+	for (k = 0; k<N; k++)
+	{
+		for (j = 0; j<N; j++)
+		{
+			if (row[j] == 0)//活动j还未输出  
+			{
+				t = 1;//标识符  
+				for (i = 0; i<N; i++)
+					if (g.arcs[i][j] == 1)//当前活动有入度（活动i必须在活动j之前）  
+					{
+						t = 0;
+						break;
+					}
+				if (t == 1)//活动j没有入度  
+				{
+					m = j;
+					break;
+				}
+			}
+		}
+		if (j != N)
+		{
+			row[m] = v;
+			/*printf("%c", g.vexs[m]);*/
+			cout << g.vexs[m];
+			for (i = 0; i<N; i++)
+				g.arcs[m][i] = 0;//将已经输出的活动所到达的下个活动的入度置为0  
+			v++;
+		}
+		else
+			break;
+	}
+	if (v - 1 < N)//当row中不是所有的元素都被赋予新值v时，说明有环存在  
+	{
+		cout << endl;
+		cout << "\n该有向图有环存在！" << endl;
+	}
+	
+}
 
 int main()
 {
@@ -12,7 +56,6 @@ int main()
 	//CMap *pMap = new CMap(capacity);
 	
 	CMap *pMap = new CMap(20);
-	
 	
 	//for (int i = 0; i < capacity; i++)
 	//{
@@ -26,7 +69,7 @@ int main()
 	//	case 1: {Node * pNodeA = new Node(name); pMap->addNode(pNodeA); break; }
 	//	case 2: {Node * pNodeB = new Node(name); pMap->addNode(pNodeB); break; }
 	//	case 3: {Node * pNodeC = new Node(name); pMap->addNode(pNodeC); break; }
-	//	case 4:{Node * pNodeD = new Node(name); pMap->addNode(pNodeD); break; }
+	//	case 4: {Node * pNodeD = new Node(name); pMap->addNode(pNodeD); break; }
 	//	case 5: {Node * pNodeE = new Node(name); pMap->addNode(pNodeE); break; }
 	//	case 6: {Node * pNodeF = new Node(name); pMap->addNode(pNodeF); break; }
 	//	case 7: {Node * pNodeG = new Node(name); pMap->addNode(pNodeG); break; }
@@ -120,7 +163,7 @@ int main()
 	pMap->addNode(pNodeS);
 	pMap->addNode(pNodeT);
 
-	/*delete pNodeA;
+	delete pNodeA;
 	delete pNodeB;
 	delete pNodeC;
 	delete pNodeD;
@@ -143,7 +186,7 @@ int main()
 	delete pNodeR;
 	delete pNodeS;
 	delete pNodeT;
-*/
+
 	/*int capacity_line = 0;
 	cout << "请输入弧数" << endl;
 	cin >> capacity_line;
@@ -186,15 +229,15 @@ int main()
 	//20
 	/*这里是邻接矩阵*/
 	
-	pMap->setValueToMatrixForUndirectedGraph(0, 1);
-	pMap->setValueToMatrixForUndirectedGraph(0, 2);
-	pMap->setValueToMatrixForUndirectedGraph(0, 3);
-	pMap->setValueToMatrixForUndirectedGraph(0, 11);
-	pMap->setValueToMatrixForUndirectedGraph(1, 2);
+	pMap->setValueToMatrixForDirectedGraph(0, 1);
+	pMap->setValueToMatrixForDirectedGraph(0, 2);
+	pMap->setValueToMatrixForDirectedGraph(0, 3);
+	pMap->setValueToMatrixForDirectedGraph(0, 11);
+	pMap->setValueToMatrixForDirectedGraph(1, 2);
 	
-	pMap->setValueToMatrixForUndirectedGraph(2, 4);
-	pMap->setValueToMatrixForUndirectedGraph(2, 6);
-	pMap->setValueToMatrixForUndirectedGraph(2, 7);
+	pMap->setValueToMatrixForDirectedGraph(2, 4);
+	pMap->setValueToMatrixForDirectedGraph(2, 6);
+	pMap->setValueToMatrixForDirectedGraph(2, 7);
 	pMap->setValueToMatrixForUndirectedGraph(3, 4);
 	pMap->setValueToMatrixForUndirectedGraph(4, 6);
 
@@ -285,7 +328,31 @@ int main()
 
 	//pMap->primTree(0);
 	//pMap->kruskalTree();
+
 	
+	graph g;
+	
+	char vertex[N] = { 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T' };//初始化顶点数组  
+
+	
+	for (int i = 0; i<N; i++)
+	{
+		g.vexs[i] = vertex[i];
+		for (int j = 0; j<N; j++)
+			g.arcs[i][j] = pMap->m_pMatrix[i*N + j];
+	}//对图初始化
+
+	pMap->printMartix();
+	cout << endl;
+	cout << endl;
+
+	TopoSort_matrix(g);
+	cout << endl;
+	cout << endl;
+
+	pMap->printMartix();
+	cout << endl;
+	cout << endl;
 	system("pause");
 	return 0;
 }
